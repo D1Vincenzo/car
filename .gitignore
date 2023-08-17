@@ -2,7 +2,7 @@
 .env
 .venv
 env/
-venv/
+carvenv/
 ENV/
 env.bak/
 venv.bak/
