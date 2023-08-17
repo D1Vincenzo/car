@@ -103,13 +103,13 @@ class CarControl:
         up = Button(f1, text="前进", command=lambda: self.turn_up(1), activeforeground="green", activebackground="yellow", height=1, width=4)
         up.place(x=267, y=39)
 
-        left=Button(f1,text="左转",command=lambda: self.turn_left(20,1), activeforeground="green",activebackground="yellow",height=1,width=4)
+        left=Button(f1,text="左转",command=lambda: self.turn_left(1), activeforeground="green",activebackground="yellow",height=1,width=4)
         left.place(x=132,y=134)
 
-        right=Button(f1,text="右转",command=lambda: self.turn_right(20,1), activeforeground="green",activebackground="yellow",height=1,width=4)
+        right=Button(f1,text="右转",command=lambda: self.turn_right(1), activeforeground="green",activebackground="yellow",height=1,width=4)
         right.place(x=412,y=134)
 
-        back=Button(f1,text="后退",command=lambda: self.turn_back(20,1), activeforeground="green",activebackground="yellow",height=1,width=4)
+        back=Button(f1,text="后退",command=lambda: self.turn_back(1), activeforeground="green",activebackground="yellow",height=1,width=4)
         back.place(x=267,y=230)
 
         stop=Button(f1,text="停止",command=self.car_stop, activeforeground="green",activebackground="yellow",height=1,width=4)
