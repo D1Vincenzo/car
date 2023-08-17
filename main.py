@@ -96,7 +96,7 @@ class CarControl:
         f2 = Frame(root, height=180, width=540, cursor="plus", bg="#333333")
         f2.place(x=269, y=629)
 
-        speed_slider = Scale(f2, from_=0, to=100, orient=HORIZONTAL, label="Speed", command=self.set_speed)
+        speed_slider = Scale(f2, from_=50, to=100, orient=HORIZONTAL, label="Speed", command=self.set_speed)
         speed_slider.set(self.speed)
         speed_slider.place(x=100, y=5)
 
