@@ -53,7 +53,6 @@ class CarControl:
         time.sleep(t_time)
 
     def turn_back(self, t_time):
-        # Set the duty cycle of the PWM to the given value
         self.L_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1, GPIO.HIGH)
         GPIO.output(self.IN2, GPIO.LOW)
@@ -61,23 +60,19 @@ class CarControl:
         self.R_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3, GPIO.HIGH)
         GPIO.output(self.IN4, GPIO.LOW)
-        # Wait for the given time
         time.sleep(t_time)
 
     def turn_left(self, t_time):
         # Set the duty cycle of the PWM to the given value
-        self.L_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1,False)
         GPIO.output(self.IN2,False)
 
         self.R_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3,GPIO.HIGH)
         GPIO.output(self.IN4,GPIO.LOW)
-        # Wait for the given time
         time.sleep(t_time)
 
     def turn_right(self, t_time):
-        # Set the duty cycle of the PWM to the given value
         self.L_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN1,GPIO.HIGH)
         GPIO.output(self.IN2,GPIO.LOW)
@@ -85,10 +80,9 @@ class CarControl:
         self.R_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN3,False)
         GPIO.output(self.IN4,False)
-        # Wait for the given time
         time.sleep(t_time)
 
-    def car_stop(self):
+    def car_stop(self, t_time):
         # Set the duty cycle of the PWM to 0
         self.L_Motor.ChangeDutyCycle(0)
         GPIO.output(self.IN1, False)
@@ -97,28 +91,33 @@ class CarControl:
         self.L_Motor.ChangeDutyCycle(0)
         GPIO.output(self.IN3, False)
         GPIO.output(self.IN4, False)
-    
+        time.sleep(t_time)
+
     def ConInterface(self):
         # Create a Tkinter window, set the title, size and bg color
         root = Tk()
         root.title("Control")
-        root.geometry("800x600")
-        root['bg'] = "#333333"
-        # Make the window not resizable
-        root.resizable(width=False, height=False)
+        window_width = 800
+        window_height = 600
+        root.geometry("{}x{}".format(window_width, window_height))
+        background = "#333333"
+        root['bg'] = background
+        # Make the window resizable
+        root.resizable(width=True, height=True)
 
         # Create the frame for the video, controller and side
-        videof = Frame(root, height=360, width=675, cursor="cross")
-        ctrlf = Frame(root, height=270, width=540, cursor="circle", bg="#333333")
-        sidef = Frame(root, height=180, width=540, cursor="plus", bg="#333333")
+        video_height = window_height*0.5
+        video_width = window_width*0.5
+        videof = Frame(root, height=video_height, width=video_width, cursor="cross")
 
-        # Place the frame in the window
-        videof.place(x=199, y=0)
-        ctrlf.place(x=269, y=359)
-        sidef.place(x=269, y=629)
+        ctrl_height = window_height*0.5
+        ctrl_width = window_width*0.5
+        ctrlf = Frame(root, height=ctrl_height, width=ctrl_width, cursor="circle", bg=background)
+
+        slidef = Frame(root, height=100, width=100, cursor="plus", bg=background)
 
         # Create a speed slider and set the speed of it
-        speed_slider = Scale(sidef, from_=50, to=100, orient=HORIZONTAL, label="Speed", command=self.set_speed)
+        speed_slider = Scale(slidef, from_=100, to=50, orient=VERTICAL, label="Speed", command=self.set_speed)
         speed_slider.set(self.speed)
 
         # Create buttons
@@ -126,15 +125,21 @@ class CarControl:
         left=Button(ctrlf,text="左转",command=lambda: self.turn_left(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
         right=Button(ctrlf,text="右转",command=lambda: self.turn_right(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
         back=Button(ctrlf,text="后退",command=lambda: self.turn_back(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
-        stop=Button(ctrlf,text="停止",command=lambda: self.car_stop, activeforeground="green",activebackground="yellow",height=1,width=4)
+        stop=Button(ctrlf,text="停止",command=lambda: self.car_stop(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
+
+        # Place the frame in the window
+        videof.place(relx=0.5, rely=0.1, anchor='n')
+        ctrlf.place(relx=0.5, rely=0.9, anchor='s')
+        slidef.place(relx=0.8, rely=0.6, anchor='nw')
 
         # Place the speed slider and buttons in the frame
-        speed_slider.place(x=100, y=5)
-        up.place(x=267, y=39)
-        left.place(x=132,y=134)
-        right.place(x=412,y=134)
-        back.place(x=267,y=230)
-        stop.place(x=267,y=134)
+        speed_slider.place(relx=0.5, rely=0.5, anchor='c')
+
+        up.place(relx=0.5, rely=0.3, anchor='c')
+        left.place(relx=0.3, rely=0.5, anchor='c')
+        right.place(relx=0.7, rely=0.5, anchor='c')
+        stop.place(relx=0.5, rely=0.5, anchor='c')
+        back.place(relx=0.5, rely=0.7, anchor='c')
 
         # Start the interaction window
         root.mainloop()
