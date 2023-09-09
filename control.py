@@ -2,7 +2,6 @@ import RPi.GPIO as GPIO
 import time
 from tkinter import *
 
-
 class CarControl:
     # Initialize GPIO
     def __init__(self):
