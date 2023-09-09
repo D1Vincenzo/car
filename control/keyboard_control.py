@@ -1,4 +1,4 @@
-from carcontrol import CarControl
+from control.carcontrol import CarControl
 import os
 import sys
 import time
@@ -17,24 +17,30 @@ def main_control_loop(car):
             car.turn_up()
             time.sleep(1)
             car.car_stop()
+
         elif command == 's':
             car.turn_back()
             time.sleep(1)
             car.car_stop()
+
         elif command == 'a':
             car.turn_left()
             time.sleep(1)
             car.car_stop()
+
         elif command == 'd':
             car.turn_right()
             time.sleep(1)
             car.car_stop()
+
         elif command == 'e':
             car.car_stop()
+
         elif command == 'q':
             print("\nExiting...")
             car.car_stop()
             break
+        
         else:
             print("Invalid command!")
 

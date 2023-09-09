@@ -1,5 +1,5 @@
 from tkinter import *
-from carcontrol import CarControl
+from control.carcontrol import CarControl
 import RPi.GPIO as GPIO
 
 def ConInterface(car):
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         pass
-    
+
     GPIO.cleanup()
 
 
