@@ -61,9 +61,11 @@ if __name__ == "__main__":
     car.RB_Motor.start(car.speed)
     try:
         ConInterface(car)
-    except KeyboardInterrupt:
-        GPIO.cleanup()
 
+    except KeyboardInterrupt:
+        pass
+    
+    GPIO.cleanup()
 
 
 
