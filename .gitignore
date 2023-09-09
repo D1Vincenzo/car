@@ -9,3 +9,4 @@ venv.bak/
 .vscode
 my.h264
 .pyc
+.cpython-39.pyc
