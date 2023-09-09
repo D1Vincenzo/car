@@ -1,5 +1,5 @@
 from tkinter import *
-from control import CarControl
+from carcontrol import CarControl
 import RPi.GPIO as GPIO
 
 def ConInterface(car):
