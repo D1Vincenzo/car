@@ -1,6 +1,10 @@
+import sys
+sys.path.append('/home/hxy/car')
 from tkinter import *
 from control.carcontrol import CarControl
 import RPi.GPIO as GPIO
+from PIL import Image, ImageTk
+from cam.camera_stream import capture_stream
 
 def ConInterface(car):
     # Create a Tkinter window, set the title, size and bg color
@@ -30,11 +34,11 @@ def ConInterface(car):
     speed_slider.set(car.speed)
 
     # Create buttons
-    up = Button(ctrlf, text="前进", command=lambda: car.turn_up(0.5), activeforeground="green", activebackground="yellow", height=1, width=4)
-    left=Button(ctrlf, text="左转",command=lambda: car.turn_left(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
-    right=Button(ctrlf, text="右转",command=lambda: car.turn_right(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
-    back=Button(ctrlf, text="后退",command=lambda: car.turn_back(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
-    stop=Button(ctrlf, text="停止",command=lambda: car.car_stop(0.5), activeforeground="green",activebackground="yellow",height=1,width=4)
+    up = Button(ctrlf, text="前进", command=lambda: car.turn_up(), activeforeground="green", activebackground="yellow", height=1, width=4)
+    left=Button(ctrlf, text="左转",command=lambda: car.turn_left(), activeforeground="green",activebackground="yellow",height=1,width=4)
+    right=Button(ctrlf, text="右转",command=lambda: car.turn_right(), activeforeground="green",activebackground="yellow",height=1,width=4)
+    back=Button(ctrlf, text="后退",command=lambda: car.turn_back(), activeforeground="green",activebackground="yellow",height=1,width=4)
+    stop=Button(ctrlf, text="停止",command=lambda: car.car_stop(), activeforeground="green",activebackground="yellow",height=1,width=4)
 
     # Place the frame in the window
     videof.place(relx=0.5, rely=0.1, anchor='n')
@@ -50,8 +54,31 @@ def ConInterface(car):
     stop.place(relx=0.5, rely=0.5, anchor='c')
     back.place(relx=0.5, rely=0.7, anchor='c')
 
+
+    video_label = Label(videof)
+    video_label.pack(fill=BOTH, expand=YES)
+
+    # Start the camera stream generator
+    stream_gen = capture_stream()
+
+    # Update the video frame in the Tkinter window
+    update_video_frame(videof, video_label, stream_gen)
+
     # Start the interaction window
     root.mainloop()
+
+
+def update_video_frame(videof, video_label, stream_gen):
+    try:
+        frame = next(stream_gen)
+        image = Image.fromarray(frame)
+        photo = ImageTk.PhotoImage(image=image)
+        video_label.config(image=photo)
+        video_label.image = photo
+        videof.after(10, update_video_frame, videof, video_label, stream_gen)
+    except StopIteration:
+        pass
+
 
 if __name__ == "__main__":
     car = CarControl()
