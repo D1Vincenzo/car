@@ -8,5 +8,5 @@ env.bak/
 venv.bak/
 .vscode
 my.h264
-.pyc
+*.pyc
 .cpython-39.pyc
