@@ -18,7 +18,11 @@ if method == "1":
         pass
 
 elif method == "2":
-    main_control_loop(car)
+    try:
+        main_control_loop(car)
+
+    except KeyboardInterrupt:
+        pass
 
 else:
     print("Invalid input")
