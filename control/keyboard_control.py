@@ -15,22 +15,22 @@ def main_control_loop(car):
 
         if command == 'w':
             car.turn_up()
-            time.sleep(1)
+            time.sleep(0.1)
             car.car_stop()
 
         elif command == 's':
             car.turn_back()
-            time.sleep(1)
+            time.sleep(0.1)
             car.car_stop()
 
         elif command == 'a':
             car.turn_left()
-            time.sleep(1)
+            time.sleep(0.1)
             car.car_stop()
 
         elif command == 'd':
             car.turn_right()
-            time.sleep(1)
+            time.sleep(0.1)
             car.car_stop()
 
         elif command == 'e':
