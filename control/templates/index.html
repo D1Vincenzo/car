@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Control</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Control your car with arrow keys!</h1>
+
+    <script>
+        $(document).keydown(function(e) {
+            let direction;
+            switch(e.which) {
+                case 37: // left
+                    direction = 'left';
+                    break;
+                case 38: // up
+                    direction = 'up';
+                    break;
+                case 39: // right
+                    direction = 'right';
+                    break;
+                case 40: // down
+                    direction = 'down';
+                    break;
+                default:
+                    return;
+            }
+            $.post(`/control/${direction}`);
+        });
+
+        $(document).keyup(function(e) {
+            $.post('/control/stop');
+        });
+    </script>
+</body>
+</html>
