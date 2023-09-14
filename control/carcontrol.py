@@ -25,7 +25,7 @@ class CarControl:
         self.IN7 = 36
         self.IN8 = 38
         
-        self.speed = 30
+        self.speed = 50
         # Initialize GPIO
         self.init_gpio()
         # Create PWM objects for all motors
@@ -103,12 +103,12 @@ class CarControl:
 
     def turn_left(self):
         self.LF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN1, False)
-        GPIO.output(self.IN2, False)
+        GPIO.output(self.IN1, GPIO.HIGH)
+        GPIO.output(self.IN2, GPIO.LOW)
 
         self.LB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN3, False)
-        GPIO.output(self.IN4, False)
+        GPIO.output(self.IN3, GPIO.LOW)
+        GPIO.output(self.IN4, GPIO.HIGH)
 
         self.RF_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN5, GPIO.HIGH)
@@ -128,12 +128,12 @@ class CarControl:
         GPIO.output(self.IN4, GPIO.LOW)
 
         self.RF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN5, False)
-        GPIO.output(self.IN6, False)
+        GPIO.output(self.IN5, GPIO.LOW)
+        GPIO.output(self.IN6, GPIO.HIGH)
 
         self.RB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN7, False)
-        GPIO.output(self.IN8, False)
+        GPIO.output(self.IN7, GPIO.HIGH)
+        GPIO.output(self.IN8, GPIO.LOW)
 
     def car_stop(self):
         self.LF_Motor.ChangeDutyCycle(self.speed)

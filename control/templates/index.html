@@ -7,7 +7,19 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Control your car with arrow keys!</h1>
+    <h1>Arrow Key Control</h1>
+    
+
+    <!-- 
+    <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+    -->
+    <!--
+    <img src="http://192.168.100.11/html/cam_pic.php" alt="RPI Live Stream">
+    -->
+    
+    <iframe width="640" height="480"
+    src="http://192.168.100.11/html/">      
+    </iframe>
 
     <script>
         $(document).keydown(function(e) {

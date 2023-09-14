@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from carcontrol import CarControl
 import RPi.GPIO as GPIO
+import picamera
+import io
 
 
 app = Flask(__name__)
 car = CarControl()
+
+
 
 @app.route('/')
 def index():
@@ -23,6 +27,25 @@ def control(direction):
     elif direction == 'stop':
         car.car_stop()
     return '', 204
+
+def generate():
+    with picamera.PiCamera(resolution='640x480', framerate=60) as camera:
+        camera.rotation = 180  # Adjust this if your video is upside down
+        camera.resolution = (320, 240)
+        camera.vflip = True
+        camera.hflip = True
+        while True:
+            output = io.BytesIO()
+            camera.capture(output, format='jpeg')
+            frame = output.getvalue()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            output.flush()
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     car.LF_Motor.start(car.speed)

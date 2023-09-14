@@ -4,6 +4,7 @@ from control.keyboard_control import main_control_loop
 import RPi.GPIO as GPIO
 
 method = input("Enter the name of the controller, GUI(1) or Keyboard(2): ")
+
 car = CarControl()
 car.LF_Motor.start(car.speed)
 car.LB_Motor.start(car.speed)
