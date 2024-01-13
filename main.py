@@ -1,5 +1,5 @@
 from control.carcontrol import CarControl
-from control.GUI_control import ConInterface
+#from control.GUI_control import ConInterface
 from control.keyboard_control import main_control_loop
 import RPi.GPIO as GPIO
 
@@ -12,18 +12,19 @@ car.RF_Motor.start(car.speed)
 car.RB_Motor.start(car.speed)
 
 if method == "1":
-    try:
-        ConInterface(car)
-
-    except KeyboardInterrupt:
-        pass
-
-elif method == "2":
+#    try:
+#        ConInterface(car)
+#
+#    except KeyboardInterrupt:
+#        pass
+#
+#elif method == "2":
     try:
         main_control_loop(car)
 
     except KeyboardInterrupt:
         pass
+
 
 else:
     print("Invalid input")

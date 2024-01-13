@@ -8,24 +8,24 @@ class CarControl:
         # Identify GPIO
         self.PWMA = 16
         self.PWMB = 18
-        # 左前轮
-        self.IN1 = 11
-        self.IN2 = 13
-        # 左后轮
-        self.IN3 = 15
-        self.IN4 = 12
+        # 左前轮,HIGHLOW前转
+        self.IN1 = 15
+        self.IN2 = 12
+        # 左后轮,LOWHIGH前转
+        self.IN3 = 11
+        self.IN4 = 13
         
         # Define GPIO for right wheels
         self.PWMC = 37  
         self.PWMD = 31
-        # 右前轮
+        # 右前轮,HIGHLOW前转
         self.IN5 = 35
         self.IN6 = 33
-        # 右后轮
+        # 右后轮,LOWHIGH前转
         self.IN7 = 36
         self.IN8 = 38
         
-        self.speed = 50
+        self.speed = 100
         # Initialize GPIO
         self.init_gpio()
         # Create PWM objects for all motors
@@ -66,74 +66,83 @@ class CarControl:
         # Set the speed to the given value
         self.speed = int(val)
 
-    def turn_up(self):
-        # Control left front wheel
-        self.LF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN1, GPIO.LOW)
-        GPIO.output(self.IN2, GPIO.HIGH)
-        # Control left back wheel
-        self.LB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN3, GPIO.HIGH)
-        GPIO.output(self.IN4, GPIO.LOW)
-        # Control right front wheel
-        self.RF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN5, GPIO.HIGH)
-        GPIO.output(self.IN6, GPIO.LOW)
-        # Control right back wheel
-        self.RB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN7, GPIO.LOW)
-        GPIO.output(self.IN8, GPIO.HIGH)
+    def motor_forward(self, motor, speed):
+        if motor == 'LF':
+            GPIO.output(self.IN1, GPIO.HIGH)
+            GPIO.output(self.IN2, GPIO.LOW)
+            self.LF_Motor.ChangeDutyCycle(speed)
+        elif motor == 'LB':
+            GPIO.output(self.IN3, GPIO.LOW)
+            GPIO.output(self.IN4, GPIO.HIGH)
+            self.LB_Motor.ChangeDutyCycle(speed)
+        elif motor == 'RF':
+            GPIO.output(self.IN5, GPIO.HIGH)
+            GPIO.output(self.IN6, GPIO.LOW)
+            self.RF_Motor.ChangeDutyCycle(speed)
+        elif motor == 'RB':
+            GPIO.output(self.IN7, GPIO.LOW)
+            GPIO.output(self.IN8, GPIO.HIGH)
+            self.RB_Motor.ChangeDutyCycle(speed)
 
-    def turn_back(self):
-        self.LF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN1, GPIO.HIGH)
-        GPIO.output(self.IN2, GPIO.LOW)
+    def motor_backward(self, motor, speed):
+        if motor == 'LF':
+            GPIO.output(self.IN1, GPIO.LOW)
+            GPIO.output(self.IN2, GPIO.HIGH)
+            self.LF_Motor.ChangeDutyCycle(speed)
+        elif motor == 'LB':
+            GPIO.output(self.IN3, GPIO.HIGH)
+            GPIO.output(self.IN4, GPIO.LOW)
+            self.LB_Motor.ChangeDutyCycle(speed)
+        elif motor == 'RF':
+            GPIO.output(self.IN5, GPIO.LOW)
+            GPIO.output(self.IN6, GPIO.HIGH)
+            self.RF_Motor.ChangeDutyCycle(speed)
+        elif motor == 'RB':
+            GPIO.output(self.IN7, GPIO.HIGH)
+            GPIO.output(self.IN8, GPIO.LOW)
+            self.RB_Motor.ChangeDutyCycle(speed)
 
-        self.LB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN3, GPIO.LOW)
-        GPIO.output(self.IN4, GPIO.HIGH)
+    # Movement methods using the helper functions
+    def move_forward(self):
+        self.motor_forward('LF', self.speed)
+        self.motor_forward('LB', self.speed)
+        self.motor_forward('RF', self.speed)
+        self.motor_forward('RB', self.speed)
 
-        self.RF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN5, GPIO.LOW)
-        GPIO.output(self.IN6, GPIO.HIGH)
-
-        self.RB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN7, GPIO.HIGH)
-        GPIO.output(self.IN8, GPIO.LOW)
+    def move_backward(self):
+        self.motor_backward('LF', self.speed)
+        self.motor_backward('LB', self.speed)
+        self.motor_backward('RF', self.speed)
+        self.motor_backward('RB', self.speed)
 
     def turn_left(self):
-        self.LF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN1, GPIO.HIGH)
-        GPIO.output(self.IN2, GPIO.LOW)
-
-        self.LB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN3, GPIO.LOW)
-        GPIO.output(self.IN4, GPIO.HIGH)
-
-        self.RF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN5, GPIO.HIGH)
-        GPIO.output(self.IN6, GPIO.LOW)
-
-        self.RB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN7, GPIO.LOW)
-        GPIO.output(self.IN8, GPIO.HIGH)
+        self.motor_backward('LF', self.speed)
+        self.motor_backward('LB', self.speed)
+        self.motor_forward('RF', self.speed)
+        self.motor_forward('RB', self.speed)
 
     def turn_right(self):
-        self.LF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN1, GPIO.LOW)
-        GPIO.output(self.IN2, GPIO.HIGH)
+        self.motor_forward('LF', self.speed)
+        self.motor_forward('LB', self.speed)
+        self.motor_backward('RF', self.speed)
+        self.motor_backward('RB', self.speed)
 
-        self.LB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN3, GPIO.HIGH)
-        GPIO.output(self.IN4, GPIO.LOW)
 
-        self.RF_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN5, GPIO.LOW)
-        GPIO.output(self.IN6, GPIO.HIGH)
+    def shift_left(self):
+        self.motor_backward('LF', self.speed)
+        self.motor_forward('LB', self.speed)
+        self.motor_forward('RF', self.speed)
+        self.motor_backward('RB', self.speed)
+        
+    
+    def shift_right(self):
+        self.motor_forward('LF', self.speed)
+        self.motor_backward('LB', self.speed)
+        self.motor_backward('RF', self.speed)
+        self.motor_forward('RB', self.speed)
+        
+        
 
-        self.RB_Motor.ChangeDutyCycle(self.speed)
-        GPIO.output(self.IN7, GPIO.HIGH)
-        GPIO.output(self.IN8, GPIO.LOW)
 
     def car_stop(self):
         self.LF_Motor.ChangeDutyCycle(self.speed)
@@ -151,6 +160,3 @@ class CarControl:
         self.RB_Motor.ChangeDutyCycle(self.speed)
         GPIO.output(self.IN7, False)
         GPIO.output(self.IN8, False)
-
-
-
